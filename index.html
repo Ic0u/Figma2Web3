@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange: #FF6B00;
+            --navy: #192041;
+            --light-gray: #F8F9FA;
+            --text-gray: #6C757D;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light-gray);
+            color: var(--navy);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: var(--navy);
+            color: white;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(25, 32, 65, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--orange);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            position: relative;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 25px 20px;
+            display: block;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255, 107, 0, 0.1);
+            color: var(--orange);
+        }
+
+        .nav-menu a.active {
+            background: var(--orange);
+            color: white;
+        }
+
+        .section {
+            display: none;
+            margin: 40px 0;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--navy) 0%, #2a3a6a 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .content-box {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 4px 30px rgba(25, 32, 65, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #E9ECEF;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
+        }
+
+        .btn {
+            background: var(--orange);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #e55f00;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--navy);
+        }
+
+        .btn-secondary:hover {
+            background: #0f1629;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--orange);
+            color: var(--orange);
+        }
+
+        .btn-outline:hover {
+            background: var(--orange);
+            color: white;
+        }
+
+        .link {
+            color: var(--orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .link:hover {
+            opacity: 0.8;
+        }
+
+        .room-grid, .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s;
+            border: 1px solid #E9ECEF;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(25, 32, 65, 0.15);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--orange) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(25, 32, 65, 0.8) 0%, rgba(255, 107, 0, 0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .card:hover .card-img::before {
+            opacity: 1;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .card-title {
+            font-family: 'Quicksand', sans-serif;
+            color: var(--navy);
+            font-size: 22px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .card-price {
+            color: var(--orange);
+            font-size: 28px;
+            font-weight: 700;
+            margin: 15px 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .card-features {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--navy) 0%, #2a3a6a 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.2) 0%, transparent 70%);
+            transition: transform 0.5s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card:hover::before {
+            transform: translate(-25%, -25%);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Quicksand', sans-serif;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .checkout-summary {
+            background: var(--light-gray);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #E9ECEF;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            color: var(--text-gray);
+            font-size: 15px;
+        }
+
+        .price-total {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--orange);
+            border-top: 3px solid var(--orange);
+            padding-top: 20px;
+            margin-top: 20px;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(25, 32, 65, 0.08);
+        }
+
+        .search-bar input, .search-bar select {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #E9ECEF;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+        }
+
+        .social-btn:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .chart-placeholder {
+            background: white;
+            height: 350px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-gray);
+            font-size: 18px;
+            margin: 20px 0;
+            border: 2px dashed #E9ECEF;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #E9ECEF;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: var(--text-gray);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(255, 107, 0, 0.1);
+            color: var(--orange);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-menu a {
+                padding: 15px;
+                font-size: 14px;
+            }
+
+            .content-box {
+                padding: 30px 20px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .room-grid, .car-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 107, 0, 0.1);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 8px;
+            color: var(--orange);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="logo">
+                 PolyHotel
+            </div>
+            <ul class="nav-menu">
+                <li><a href="frame2.html" onclick="showSection('register')">Đăng ký</a></li>
+                <li><a href="#frame1" onclick="showSection('login')" class="active">Đăng nhập</a></li>
+                <li><a href="frame3.html" onclick="showSection('booking')">Đặt phòng</a></li>
+                <li><a href="frame5.html" onclick="showSection('car')">Thuê xe</a></li>
+                <li><a href="#" onclick="showSection('stats')">Thống kê</a></li>
+                <li><a href="frame4.html" onclick="showSection('checkout')">Checkout</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- ĐĂNG KÝ -->
+        <div id="register" class="section">
+            <div class="section-header">
+                <div class="container">
+                    <h2 class="section-title">Tạo tài khoản mới</h2>
+                    <p class="section-subtitle">Đăng ký để trải nghiệm dịch vụ đặt phòng tốt nhất</p>
+                </div>
+            </div>
+            <div class="content-box">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Họ và tên</label>
+                            <input type="text" placeholder="Nguyễn Văn A" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input type="tel" placeholder="0123456789" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Mật khẩu</label>
+                            <input type="password" placeholder="Tối thiểu 8 ký tự" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Xác nhận mật khẩu</label>
+                            <input type="password" placeholder="Nhập lại mật khẩu" required>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" style="margin-bottom: 0;">Tôi đồng ý với <a href="#" class="link">điều khoản sử dụng</a> và <a href="#" class="link">chính sách bảo mật</a></label>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Đăng ký ngay</button>
+                    
+                    <div class="divider"><span>hoặc</span></div>
+                    
+                    <div class="social-login">
+                        <button type="button" class="social-btn">🔍 Google</button>
+                        <button type="button" class="social-btn">📘 Facebook</button>
+                    </div>
+                    
+                    <p style="text-align: center; margin-top: 25px; color: var(--text-gray);">
+                        Đã có tài khoản? <a href="#" class="link" onclick="showSection('login')">Đăng nhập ngay</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- ĐĂNG NHẬP -->
+        <div id="login" class="section active">
+            <div class="section-header">
+                <div class="container">
+                    <h2 class="section-title">Chào mừng trở lại!</h2>
+                    <p class="section-subtitle">Đăng nhập để tiếp tục đặt phòng</p>
+                </div>
+            </div>
+            <div class="content-box" style="max-width: 600px; margin: 0 auto;">
+                <form>
+                    <div class="form-group">
+                        <label>Email hoặc số điện thoại</label>
+                        <input type="text" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu</label>
+                        <input type="password" placeholder="Nhập mật khẩu" required>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember">
+                            <label for="remember" style="margin-bottom: 0; font-weight: 400;">Ghi nhớ đăng nhập</label>
+                        </div>
+                        <a href="#" class="link">Quên mật khẩu?</a>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Đăng nhập</button>
+                    
+                    <div class="divider"><span>hoặc đăng nhập với</span></div>
+                    
+                    <div class="social-login">
+                        <button type="button" class="social-btn">🔍 Google</button>
+                        <button type="button" class="social-btn">📘 Facebook</button>
+                    </div>
+                    
+                    <p style="text-align: center; margin-top: 25px; color: var(--text-gray);">
+                        Chưa có tài khoản? <a href="#" class="link" onclick="showSection('register')">Đăng ký ngay</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- ĐẶT PHÒNG -->
+        <div id="booking" class="section">
+            <div class="section-header">
+                <div class="container">
+                    <h2 class="section-title">Đặt phòng khách sạn</h2>
+                    <p class="section-subtitle">Tìm kiếm và đặt phòng khách sạn phù hợp với bạn</p>
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <input type="date" value="2025-10-23">
+                <input type="date" value="2025-10-25">
+                <select>
+                    <option>1 Khách</option>
+                    <option>2 Khách</option>
+                    <option>3 Khách</option>
+                    <option>4+ Khách</option>
+                </select>
+                <button class="btn">🔍 Tìm kiếm</button>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <span class="badge">Tất cả</span>
+                <span class="badge">Standard</span>
+                <span class="badge">Deluxe</span>
+                <span class="badge">Suite</span>
+                <span class="badge">Giá tốt nhất</span>
+            </div>
+
+            <div class="room-grid">
+                <div class="card">
+                    <div class="card-img">🛏️</div>
+                    <div class="card-body">
+                        <h3 class="card-title">Phòng Standard</h3>
+                        <div class="card-features">
+                            <span class="feature-icon">⭐</span>
+                            <span class="feature-icon">📶</span>
+                            <span class="feature-icon">📺</span>
+                            <span class="feature-icon">❄️</span>
+                            <br><br>
+                            WiFi miễn phí • TV màn hình phẳng • Điều hòa • Phòng tắm riêng
+                        </div>
+                        <div class="card-price">500.000₫<span style="font-size: 16px; font-weight: 400; color: var(--text-gray);">/đêm</span></div>
+                        <button class="btn" style="width: 100%;">Đặt ngay</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img">🏨</div>
+                    <div class="card-body">
+                        <h3 class="card-title">Phòng Deluxe</h3>
+                        <div class="card-features">
+                            <span class="feature-icon">⭐</span>
+                            <span class="feature-icon">📶</span>
+                            <span class="feature-icon">🪟</span>
+                            <span class="feature-icon">☕</span>
+                            <br><br>
+                            View đẹp • Phòng rộng 35m² • Minibar • Bàn làm việc
+                        </div>
+                        <div class="card-price">800.000₫<span style="font-size: 16px; font-weight: 400; color: var(--text-gray);">/đêm</span></div>
+                        <button class="btn" style="width: 100%;">Đặt ngay</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img">👑</div>
+                    <div class="card-body">
+                        <h3 class="card-title">Phòng Suite</h3>
+                        <div class="card-features">
+                            <span class="feature-icon">⭐</span>
+                            <span class="feature-icon">🛁</span>
+                            <span class="feature-icon">🍾</span>
+                            <span class="feature-icon">👔</span>
+                            <br><br>
+                            Phòng sang trọng 60m² • Bồn tắm Jacuzzi • Dịch vụ butler
+                        </div>
+                        <div class="card-price">1.500.000₫<span style="font-size: 16px; font-weight: 400; color: var(--text-gray);">/đêm</span></div>
+                        <button class="btn" style="width: 100%;">Đặt ngay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THUÊ XE -->
+        <div id="car" class="section">
+            <div class="section-header">
+                <div class="container">
+                    <h2 class="section-title">Dịch vụ thuê xe</h2>
+                    <p class="section-subtitle">Thuê xe đa dạng với giá cả hợp lý</p>
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="📍 Địa điểm nhận xe">
+                <input type="datetime-local" value="2025-10-23T09:00">
+                <input type="datetime-local" value="2025-10-25T18:00">
+                <button class="btn">🔍 Tìm xe</button>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <span class="badge">Tất cả</span>
+                <span class="badge">Sedan</span>
+                <span class="badge">SUV</span>
+                <span class="badge">MPV</span>
+                <span class="badge">Sang trọng</span>
+            </div>
+
+            <div class="car-grid">
+                <div class="card">
+                    <div class="card-img">🚗</div>
+                    <div class="card-body">
+                        <h3 class="card-title">Toyota Vios</h3>
+                        <div class="card-features">
+                            <span class="feature-icon">⚙️</span> Tự động •
+                            <span class="feature-icon">👥</span> 5 chỗ •
+                            <span class="feature-icon">⛽</span> Xăng
+                            <br><br>
+                            Sedan phổ biến • Tiết kiệm nhiên liệu • Phù hợp di chuyển trong thành phố
+                        </div>
+                        <div class="card-price">600.000₫<span style="font-size: 16px; font-weight: 400; color: var(--text-gray);">/ngày</span></div>
+                        <button class="btn" style="width: 100%;">Thuê xe</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img">🚙</div>
+                    <div class="card-body">
+                        <h3 class="card-title">Honda CR-V</h3>
+                        <div class="card-features">
+                            <span class="feature-icon">⚙️</span> Tự động •
+                            <span class="feature-icon">👥</span> 7 chỗ •
+                            <span class="feature-icon">⛽</span> Dầu
+                            <br><br>
+                            SUV rộng rãi • Phù hợp gia đình • Camera 360 độ
+                        </div>
+                        <div class="card-price">1.200.000₫<span style="font-size: 16px; font-weight: 400; color: var(--text-gray);">/ngày</span></div>
+                        <button class="btn" style="width: 100%;">Thuê xe</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img">🏎️</div>
+                    <div class="card-body">
+                        <h3 class="card-title">Mercedes C-Class</h3>
+                        <div class="card-features">
+                            <span class="feature-icon">⚙️</span> Tự động •
+                            <span class="feature-icon">👥</span> 5 chỗ •
+                            <span class="feature-icon">⛽</span> Hybrid
+                            <br><br>
+                            Xe sang cao cấp • Nội thất da • Hệ thống âm thanh Burmester
+                        </div>
+                        <div class="card-price">2.500.000₫<span style="font-size: 16px; font-weight: 400; color: var(--text-gray);">/ngày</span></div>
+                        <button class="btn" style="width: 100%;">Thuê xe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THỐNG KÊ -->
+        <div id="stats" class="section">
+            <div class="section-header">
+                <div class="container">
+                    <h2 class="section-title">Báo cáo & Thống kê</h2>
+                    <p class="section-subtitle">Tổng quan hiệu suất

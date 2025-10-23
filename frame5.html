@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thuê xe - PolyVehicle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #32519B 0%, #264080 100%);
+            padding: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            font-size: 36px;
+            color: #D14C41;
+        }
+
+        .logo h1 {
+            font-family: 'Quicksand', sans-serif;
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 50px;
+            padding: 8px 8px 8px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar i {
+            color: #32519B;
+            font-size: 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .search-bar input::placeholder {
+            color: #a8b3c1;
+        }
+
+        .btn-search {
+            padding: 14px 35px;
+            background: #D14C41;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-search:hover {
+            background: #b93d33;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .filters-section {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            color: #32519B;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-group label i {
+            font-size: 16px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 12px 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #32519B;
+            box-shadow: 0 0 0 3px rgba(50, 81, 155, 0.1);
+        }
+
+        .btn-filter {
+            padding: 12px 30px;
+            background: #32519B;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-filter:hover {
+            background: #273f7a;
+            transform: translateY(-2px);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-family: 'Quicksand', sans-serif;
+            color: #32519B;
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            color: #D14C41;
+        }
+
+        .vehicle-count {
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        .vehicles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px;
+        }
+
+        .vehicle-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .vehicle-image {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vehicle-image i {
+            font-size: 90px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .availability-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .available {
+            background: #10b981;
+            color: white;
+        }
+
+        .limited {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .unavailable {
+            background: #ef4444;
+            color: white;
+        }
+
+        .vehicle-type {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(50, 81, 155, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .vehicle-content {
+            padding: 25px;
+        }
+
+        .vehicle-name {
+            font-family: 'Quicksand', sans-serif;
+            color: #32519B;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .vehicle-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .spec {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .spec i {
+            color: #32519B;
+            font-size: 15px;
+        }
+
+        .vehicle-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .feature-tag {
+            background: #e8ecf1;
+            color: #32519B;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .vehicle-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .vehicle-price {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-label {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .price-amount {
+            font-family: 'Quicksand', sans-serif;
+            color: #D14C41;
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .price-period {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .btn-rent {
+            padding: 12px 28px;
+            background: #D14C41;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-rent:hover {
+            background: #b93d33;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(209, 76, 65, 0.4);
+        }
+
+        .btn-rent:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vehicles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo h1 {
+                font-size: 26px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-car"></i>
+                <h1>PolyVehicle</h1>
+            </div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm xe theo tên, loại hoặc đặc điểm..." onkeyup="handleSearch()">
+                <button class="btn-search" onclick="handleSearch()">
+                    <span>Tìm kiếm</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>
+                        <i class="fas fa-calendar-check"></i>
+                        Ngày thuê
+                    </label>
+                    <input type="date" id="startDate" value="2025-10-24">
+                </div>
+                <div class="filter-group">
+                    <label>
+                        <i class="fas fa-calendar-times"></i>
+                        Ngày trả
+                    </label>
+                    <input type="date" id="endDate" value="2025-10-26">
+                </div>
+                <div class="filter-group">
+                    <label>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Địa điểm
+                    </label>
+                    <select id="location">
+                        <option value="all">Tất cả địa điểm</option>
+                        <option value="hanoi">Hà Nội</option>
+                        <option value="hcm" selected>TP. Hồ Chí Minh</option>
+                        <option value="danang">Đà Nẵng</option>
+                        <option value="cantho">Cần Thơ</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>
+                        <i class="fas fa-filter"></i>
+                        Loại xe
+                    </label>
+                    <select id="vehicleType" onchange="filterVehicles()">
+                        <option value="all">Tất cả</option>
+                        <option value="car">Ô tô</option>
+                        <option value="motorbike">Xe máy</option>
+                        <option value="van">Xe van</option>
+                    </select>
+                </div>
+                <button class="btn-filter" onclick="filterVehicles()">
+                    <i class="fas fa-check"></i>
+                    Áp dụng
+                </button>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-car-side"></i>
+                Danh sách xe
+            </h2>
+            <span class="vehicle-count" id="vehicleCount">12 xe có sẵn</span>
+        </div>
+
+        <div class="vehicles-grid" id="vehiclesGrid">
+            <!-- Vehicles will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script>
+        const vehicles = [
+            {
+                id: 1,
+                name: "Honda City",
+                type: "car",
+                typeName: "Ô tô",
+                price: "600.000",
+                seats: 5,
+                transmission: "Tự động",
+                fuel: "Xăng",
+                features: ["Điều hòa", "GPS", "Bluetooth"],
+                availability: "available",
+                availabilityText: "Còn trống",
+                gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                icon: "fa-car"
+            },
+            {
+                id: 2,
+                name: "Toyota Vios",
+                type: "car",
+                typeName: "Ô tô",
+                price: "650.000",
+                seats: 5,
+                transmission: "Tự động",
+                fuel: "Xăng",
+                features: ["Điều hòa", "Camera lùi", "Cảm biến"],
+                availability: "available",
+                availabilityText: "Còn trống",
+                gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+                icon: "fa-car"
+            },
+            {
+                id: 3,
+                name: "Honda SH 160i",
+                type: "motorbike",
+                typeName: "Xe máy",
+                price: "150.000",
+                seats: 2,
+                transmission: "Số tự động",
+                fuel: "Xăng",
+                features: ["Cốp xe", "Chống trộm", "Áo mưa"],
+                availability: "limited",
+                availabilityText: "Sắp hết",
+                gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+                icon: "fa-motorcycle"
+            },
+            {
+                id: 4,
+                name: "Yamaha Exciter",
+                type: "motorbike",
+                typeName: "Xe máy",
+                price: "120.000",
+                seats: 2,
+                transmission: "Số tay",
+                fuel: "Xăng",
+                features: ["Thể thao", "ABS", "Bảo hiểm"],
+                availability: "available",
+                availabilityText: "Còn trống",
+                gradient: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+                icon: "fa-motorcycle"
+            },
+            {
+                id: 5,
+                name: "Ford Transit",
+                type: "van",
+                typeName: "Xe van",
+                price: "1.200.000",
+                seats: 16,
+                transmission: "Số sàn",
+                fuel: "Dầu",
+                features: ["16 chỗ", "Điều hòa", "Lái xe"],
+                availability: "available",
+                availabilityText: "Còn trống",
+                gradient: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
+                icon: "fa-van-shuttle"
+            },
+            {
+                id: 6,
+                name: "Hyundai Solati",
+                type: "van",
+                typeName: "Xe van",
+                price: "1.500.000",
+                seats: 16,
+                transmission: "Số tự động",
+                fuel: "Dầu",
+                features: ["16 chỗ", "Ghế VIP", "WiFi"],
+                availability: "limited",
+                availabilityText: "Sắp hết",
+                gradient: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)",
+                icon: "fa-van-shuttle"
+            },
+            {
+                id: 7,
+                name: "Mazda 3",
+                type: "car",
+                typeName: "Ô tô",
+                price: "750.000",
+                seats: 5,
+                transmission: "Tự động",
+                fuel: "Xăng",
+                features: ["Sang trọng", "Cửa sổ trời", "Loa Bose"],
+                availability: "available",
+                availabilityText: "Còn trống",
+                gradient: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
+                icon: "fa-car"
+            },
+            {
+                id: 8,
+                name: "Honda Winner X",
+                type: "motorbike",
+                typeName: "Xe máy",
+                price: "130.000",
+                seats: 2,
+                transmission: "Số tay",
+                fuel: "Xăng",
+                features: ["Thể thao", "LED", "SmartKey"],
+                availability: "available",
+                availabilityText: "Còn trống",
+                gradient: "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)",
+                icon: "fa-motorcycle"
+            },
+            {
+                id: 9,
+                name: "Mitsubishi Xpander",
+                type: "van",
+                typeName: "Xe van",
+                price: "900.000",
+                seats: 7,
+                transmission: "Tự động",
+                fuel: "Xăng",
+                features: ["7 chỗ", "Gầm cao", "An toàn"],
+                availability: "unavailable",
+                availabilityText: "Hết xe",
+                gradient: "linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)",
+                icon: "fa-van-shuttle"
+            },
+            {
+                id: 10,
+                name: "Vision 2024",
+                type: "motorbike",
+                typeName: "Xe máy",
+                price: "100.000",
+                seats: 2,
+                transmission: "Số tự động",
+                fuel: "Xăng",
+                features: ["Tiết kiệm", "Nhẹ nhàng", "Dễ lái"],
+                availability: "available",
+                availabilityText: "Còn trống",
+                gradient: "linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)",
+                icon: "fa-motorcycle"
+            },
+            {
+                id: 11,
+                name: "Kia Seltos",
+                type: "car",
+                typeName: "Ô tô",
+                price: "850.000",
+                seats: 5,
+                transmission: "Tự động",
+                fuel: "Xăng",
+                features: ["SUV", "Gầm cao", "360 Camera"],
+                availability: "limited",
+                availabilityText: "Sắp hết",
+                gradient: "linear-gradient(135deg, #8EC5FC 0%, #E0C3FC 100%)",
+                icon: "fa-car"
+            },
+            {
+                id: 12,
+                name: "Mercedes Sprinter",
+                type: "van",
+                typeName: "Xe van",
+                price: "2.500.000",
+                seats: 16,
+                transmission: "Tự động",
+                fuel: "Dầu",
+                features: ["VIP", "Massage", "Minibar"],
+                availability: "available",
+                availabilityText: "Còn trống",
+                gradient: "linear-gradient(135deg, #FAD0C4 0%, #FFD1FF 100%)",
+                icon: "fa-van-shuttle"
+            }
+        ];
+
+        function renderVehicles(filteredVehicles = vehicles) {
+            const grid = document.getElementById('vehiclesGrid');
+            const count = document.getElementById('vehicleCount');
+            
+            count.textContent = `${filteredVehicles.length} xe có sẵn`;
+            
+            grid.innerHTML = filteredVehicles.map(vehicle => `
+                <div class="vehicle-card">
+                    <div class="vehicle-image" style="background: ${vehicle.gradient}">
+                        <i class="fas ${vehicle.icon}"></i>
+                        <span class="vehicle-type">${vehicle.typeName}</span>
+                        <span class="availability-badge ${vehicle.availability}">
+                            <i class="fas fa-circle"></i>
+                            ${vehicle.availabilityText}
+                        </span>
+                    </div>
+                    <div class="vehicle-content">
+                        <h3 class="vehicle-name">${vehicle.name}</h3>
+                        <div class="vehicle-specs">
+                            <span class="spec">
+                                <i class="fas fa-users"></i>
+                                ${vehicle.seats} chỗ
+                            </span>
+                            <span class="spec">
+                                <i class="fas fa-cog"></i>
+                                ${vehicle.transmission}
+                            </span>
+                            <span class="spec">
+                                <i class="fas fa-gas-pump"></i>
+                                ${vehicle.fuel}
+                            </span>
+                        </div>
+                        <div class="vehicle-features">
+                            ${vehicle.features.map(feature => `
+                                <span class="feature-tag">${feature}</span>
+                            `).join('')}
+                        </div>
+                        <div class="vehicle-footer">
+                            <div class="vehicle-price">
+                                <span class="price-label">Giá thuê</span>
+                                <div class="price-amount">
+                                    ${vehicle.price}₫
+                                    <span class="price-period">/ngày</span>
+                                </div>
+                            </div>
+                            <button class="btn-rent" 
+                                ${vehicle.availability === 'unavailable' ? 'disabled' : ''} 
+                                onclick="rentVehicle(${vehicle.id})">
+                                <span>Thuê ngay</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterVehicles() {
+            const vehicleType = document.getElementById('vehicleType').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = vehicles;
+            
+            if (vehicleType !== 'all') {
+                filtered = filtered.filter(v => v.type === vehicleType);
+            }
+            
+            if (searchTerm) {
+                filtered = filtered.filter(v => 
+                    v.name.toLowerCase().includes(searchTerm) ||
+                    v.typeName.toLowerCase().includes(searchTerm) ||
+                    v.features.some(f => f.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            renderVehicles(filtered);
+        }
+
+        function handleSearch() {
+            filterVehicles();
+        }
+
+        function rentVehicle(vehicleId) {
+            const vehicle = vehicles.find(v => v.id === vehicleId);
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const location = document.getElementById('location').options[document.getElementById('location').selectedIndex].text;
+            
+            alert(`Đặt xe thành công!\n\nXe: ${vehicle.name}\nLoại: ${vehicle.typeName}\nĐịa điểm: ${location}\nNgày thuê: ${startDate}\nNgày trả: ${endDate}\nGiá: ${vehicle.price}₫/ngày\n\nCảm ơn bạn đã chọn PolyVehicle!`);
+        }
+
+        // Initialize vehicles display
+        renderVehicles();
+    </script>
+</body>
+</html>
